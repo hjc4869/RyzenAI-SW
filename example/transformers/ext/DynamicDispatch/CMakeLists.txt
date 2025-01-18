@@ -8,6 +8,7 @@ include(ParseVersion)
 # sets version_core and other variables
 dd_parse_version(${CMAKE_CURRENT_SOURCE_DIR}/VERSION)
 project(DynamicDispatch VERSION ${version_core} LANGUAGES C CXX)
+add_definitions(-include cstdint)
 
 if(PROJECT_IS_TOP_LEVEL)
   set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)

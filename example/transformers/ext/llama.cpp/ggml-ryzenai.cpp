@@ -21,8 +21,8 @@
 // These includes aren't needed for emulation mode
 #ifndef RYZENAI_EMULATION
 // #include <ryzenai/ryzenai.hpp>
-#include <ryzenai/ops/qlinear_2/qlinear_2.hpp>
-#include <ryzenai/utils/dtype_utils.h>
+#include <qlinear_2.hpp>
+#include <dtype_utils.h>
 #endif
 
 // Macro for wrapping function calls in try catch

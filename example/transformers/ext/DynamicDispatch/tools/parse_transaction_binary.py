@@ -57,6 +57,7 @@ def bin_to_cpp(file_path, txn_hdrf, txn_srcf):
 
 def write_transaction_src(out_dir, txn_list, quiet, txn_hdr):
     with open(Path(out_dir) / Path('transaction.cpp'), 'w') as txn_src:
+        txn_src.write('#include <stdexcept>\n')
         txn_src.write('#include "utils/txn_container.hpp"\n')
         txn_src.write(f'#include "{txn_hdr}"\n')
         txn_src.write('\nTransaction::Transaction(){{}};\n')

@@ -97,8 +97,8 @@ static inline void float_buffer_to_bfloat16(const float *in,
 
     for (std::size_t i = 0; i < num_iter; ++i) {
       __m512 float_vec = _mm512_loadu_ps(in);
-      __m256bh bf16_vec = _mm512_cvtneps2bf16(float_vec);
-      _mm256_storeu_epi16(out, bf16_vec);
+      __m256bh bf16_vec = _mm512_cvtneps_pbh(float_vec);
+      _mm256_storeu_epi16(out, (__m256i)bf16_vec);
 
       in += FLOATS_PER_VECTOR;
       out += FLOATS_PER_VECTOR;

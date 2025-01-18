@@ -46,7 +46,7 @@ public:
 private:
   xrt_context *xrt_ctx_;
   std::map<std::string, std::pair<bool, xrt::bo>> instr_map_;
-  void instruction_registry::insert_to_instruction_map(
+  void insert_to_instruction_map(
       std::pair<std::string, bool> instr, std::string dir) {
     auto txn_bin_fname = instr.first;
     std::ifstream txn_bin(dir + txn_bin_fname, std::ios::binary);

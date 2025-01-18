@@ -20,8 +20,8 @@
 #include "dpu_kernel_metadata.hpp"
 
 // Subroutines to read the transaction binary
-#include "op_buf.hpp"
-#include "op_types.h"
+#include <ryzenai/aie_controller/ps/op_buf.hpp>
+#include <ryzenai/aie_controller/ps/op_types.h>
 
 #include "instruction_registry.hpp"
 #include "xrt_context.hpp"
@@ -221,7 +221,7 @@ public:
    *
    * @return none
    */
-  void qlinear_2::initialize_weights_int4(int8_t *weights, int8_t *zeros,
+  void initialize_weights_int4(int8_t *weights, int8_t *zeros,
                                           float *scales, float *bias,
                                           const std::tuple<int, int> &w_shape,
                                           int group_size = 32);
@@ -245,7 +245,7 @@ public:
    *
    * @return none
    */
-  void qlinear_2::initialize_weights_int4_mladf(
+  void initialize_weights_int4_mladf(
       int8_t *weights, int8_t *zeros, float *scales, float *bias,
       const std::tuple<int, int> &w_shape, int group_size = 128);
 
@@ -264,7 +264,7 @@ public:
    *
    * @return none
    */
-  void qlinear_2::initialize_weights(WtT *weights,
+  void initialize_weights(WtT *weights,
                                      const std::tuple<int, int> &w_shape,
                                      int group_size = 32);
 
@@ -300,8 +300,8 @@ public:
 
 template <typename InT, typename WtT, typename AccT, typename OutT>
 const std::string qlinear_2<InT, WtT, AccT, OutT>::DPU_DIR =
-    std::string(Utils::get_env_var("PYTORCH_AIE_PATH")) + "\\dll\\" +
-    std::string(Utils::get_env_var("DEVICE")) + "\\qlinear_2\\";
+    std::string(Utils::get_env_var("AIE_KERNEL_PATH")) + "/dll/" +
+    std::string(Utils::get_env_var("DEVICE")) + "/qlinear_2/";
 
 template <typename InT, typename WtT, typename AccT, typename OutT>
 const std::map<std::string, std::string>
@@ -562,10 +562,10 @@ qlinear_2<InT, WtT, AccT, OutT>::qlinear_2(const std::string &a_dtype,
 
   std::string XCLBIN_FNAME;
   if (is_mladf_enabled_) {
-    XCLBIN_FNAME = Utils::get_env_var("PYTORCH_AIE_PATH") + "\\xclbin\\" +
+    XCLBIN_FNAME = Utils::get_env_var("AIE_KERNEL_PATH") + "/xclbin/" +
                    Utils::get_env_var("DEVICE") +
-                   ((is_mladf_enabled_ == M4x4) ? "\\mladf_gemm_4x4_"
-                                                : "\\mladf_gemm_2x4x4_") +
+                   ((is_mladf_enabled_ == M4x4) ? "/mladf_gemm_4x4_"
+                                                : "/mladf_gemm_2x4x4_") +
                    xclbin_a_header.at(a_dtype_) + xclbin_b_header.at(b_dtype_) +
                    xclbin_acc_header.at(c_dtype_) + ".xclbin";
 
@@ -575,8 +575,8 @@ qlinear_2<InT, WtT, AccT, OutT>::qlinear_2(const std::string &a_dtype,
                         txnbin_b_header.at(b_dtype_) +
                         txnbin_acc_header.at(c_dtype_);
   } else {
-    XCLBIN_FNAME = Utils::get_env_var("PYTORCH_AIE_PATH") + "\\xclbin\\" +
-                   Utils::get_env_var("DEVICE") + "\\gemm_4x4_" +
+    XCLBIN_FNAME = Utils::get_env_var("AIE_KERNEL_PATH") + "/xclbin/" +
+                   Utils::get_env_var("DEVICE") + "/gemm_4x4_" +
                    xclbin_a_header.at(a_dtype_) + xclbin_b_header.at(b_dtype_) +
                    xclbin_acc_header.at(c_dtype_) + ".xclbin";
 
@@ -917,10 +917,10 @@ void qlinear_2<InT, WtT, AccT, OutT>::initialize_weights_int4(
       }
       // Select the supported group_size
       if (group_size >= 128) {
-        assert(group_size % 128 == 0, "group_size should be div by 32 or 128");
+        assert(group_size % 128 == 0);
         grp_size_ = 128;
       } else if (group_size >= 32) {
-        assert(group_size % 32 == 0, "group_size should be div by 32 or 128");
+        assert(group_size % 32 == 0);
         grp_size_ = 32;
       }
 
@@ -1082,10 +1082,10 @@ void qlinear_2<InT, WtT, AccT, OutT>::initialize_weights_int4_mladf(
 
       // Select the supported group_size
       if (group_size >= 128) {
-        assert(group_size % 128 == 0, "group_size should be div by 32 or 128");
+        assert(group_size % 128 == 0);
         grp_size_ = 128;
       } else if (group_size >= 32) {
-        assert(group_size % 32 == 0, "group_size should be div by 32 or 128");
+        assert(group_size % 32 == 0);
         grp_size_ = 32;
       }
 
